@@ -1,7 +1,7 @@
 const PENDING = 'PENDING';
 const REJECTED = 'REJECTED';
 const FULFILLED = 'FULFILLED';
-const resolvePromise = (promise2, x, resolve, reject) {
+const resolvePromise = (promise2, x, resolve, reject) => {
     // 处理返回值x的类型 来决定调用resolve还是reject
     if(promise2 === x) {
         return reject(new TypeError(`chaining cycle detected for promise #<Promise>`));
@@ -13,9 +13,9 @@ const resolvePromise = (promise2, x, resolve, reject) {
             let then = x.then;
             if(typeof then === 'function'){
                 then.call(x, y=>{
-                    resolve(y);
+                    resolvePromise(promise2, y, resolve, reject)
                 },r=>{
-                    resolve(x);
+                    reject(x);
                 });
             }else{
                 resolve(x);
